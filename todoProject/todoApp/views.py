@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404, Http404
-from .forms import CreateForm
+from .forms import CreateForm, SignUpForm
 from django.views import View
 from .models import Todo
 # Create your views here.
@@ -21,6 +21,23 @@ class Login(View):
             return redirect('todo:index')
         else:
             return redirect('todo:login')
+
+
+
+class Register(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('todo:index')
+        return render(request, 'register.html',{"form":SignUpForm})
+    def post(self, request):
+        form=SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request,"Registrations is completed")
+            return redirect('todo:register')
+        else:
+            messages.error(request, "Sorry, Registration is not done yet")
+            return redirect('todo:register')
 
 
 class Index(View):
