@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ request.user.username }}| Update to do list
+{% endblock %}
+{% block stylesheet %}
+
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <!-- Material form login -->
+            <div class="card">
+
+              <h5 class="card-header info-color white-text text-center py-4">
+                <strong>Update todo item</strong>
+              </h5>
+
+              <!--Card content-->
+              <div class="card-body px-lg-5 pt-0">
+                  {% if messages %}
+                    {% for m in messages %}
+                        <div class="{% if m.tags %}{{ m.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                        {{ m }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+
+                {% endif %}
+                <!-- Form -->
+                <form action="" method="POST" style="color: #757575;">
+                    {% csrf_token %}{% load crispy_forms_tags %}
+                  <div class="row">
+                        <div class="col-md-12">{{ form.title|as_crispy_field  }}</div>
+                  </div>
+                    <div class="row">
+                        <div class="col-md-12">{{ form.details|as_crispy_field  }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="date">Date*</label>
+                            <input type="date" class="form-control" name="todo_date" id="date" required/>
+                        </div>
+                        <div class="col-md-6">{{ form.is_completed|as_crispy_field  }}</div>
+                    </div>
+                  <!-- Sign in button -->
+                  <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0">Add</button>
+
+                </form>
+                <!-- Form -->
+
+              </div>
+
+            </div>
+            <!-- Material form login -->
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+
+{% endblock %}

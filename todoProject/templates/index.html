@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ request.user.username }}| todo list
+{% endblock %}
+{% block stylesheet %}
+    <style>
+    td.option a {
+    padding: 5px;
+    font-size: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+    </style>
+{% endblock %}
+{% block content %}
+<div class="container">
+{% if list %}
+    <div class="float-left">{% if request.GET.s == 'completed' %}
+        <a href="{% url 'todo:index' %}" class="btn btn-dark">Show all</a>
+        {% else %}
+        <a href="{% url 'todo:index' %}?s=completed" class="btn btn-dark">Hide completed task</a>
+    {% endif %}</div>
+{% endif %}
+<div class="float-right"><a href="{% url 'todo:add' %}" class="btn btn-primary">+ Add</a></div>
+{% if messages %}
+    {% for m in messages %}
+        <div class="{% if m.tags %}{{ m.tags }}{% endif %} alert-dismissible fade show" role="alert">
+        {{ m }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+
+{% endif %}
+    <div class="table-responsive text-nowrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Details</th>
+        <th scope="col">Date</th>
+        <th scope="col">Completed</th>
+        <th scope="col">Option</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for l in list %}
+          <tr>
+            <th scope="row">{{ l.id }}</th>
+            <td>{{ l.title }}</td>
+            <td>{{ l.details }}</td>
+            <td>{{ l.todo_date }}</td>
+            <td>{% if l.is_completed %}
+                <span class="text-success">Completed</span>
+                {% else %}
+                <span class="text-info">Not Yet</span>
+            {% endif %}</td>
+            <td class="option"><a href="{% url 'todo:update' l.pk %}" class="btn btn-success"><i class="fa fa-edit"></i></a><a href="{% url 'todo:marked' l.pk %}" class="btn btn-info">{% if l.is_completed %}<i class="fa fa-undo"></i>{% else %}<i class="fa fa-check-square"></i>{% endif %}</a><a href="{% url 'todo:delete' l.pk %}" class="btn btn-danger"><i class="fa fa-trash-alt"></i></a></td>
+          </tr>
+          {% empty %}
+      {% endfor %}
+
+    </tbody>
+  </table>
+
+</div>
+</div>
+{% endblock %}
+{% block script %}
+
+{% endblock %}
